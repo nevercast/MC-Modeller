@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MCModeller.Minecraft.Compatibility.IO
 {
-    public class ByteBuffer : IOBuffer<byte>
+    public class ByteBuffer : Stream, IOBuffer<byte>
     {
         private int size;
         private MemoryStream stream;
@@ -16,9 +16,22 @@ namespace MCModeller.Minecraft.Compatibility.IO
         private FloatBuffer _floatWrapper = null;
         private ShortBuffer _shortWrapper = null;
 
+
+        internal BinaryWriter Writer { get; private set; }
+        internal BinaryReader Reader { get; private set; }
+
         public ByteBuffer(int size)
         {
+            Reset(size);
+            Writer = new BinaryWriter(this);
+            Reader = new BinaryReader(this);
+        }
+
+        protected void Reset(int size)
+        {
             this.size = size;
+            if (this.stream != null)
+                this.stream.Close();
             this.stream = new MemoryStream(size);
         }
 
@@ -60,8 +73,7 @@ namespace MCModeller.Minecraft.Compatibility.IO
         public void Clear()
         {
             var position = Position;
-            stream.Close();
-            stream = new MemoryStream(size);
+            Reset(size);
             Position = position;
 
         }
@@ -90,6 +102,55 @@ namespace MCModeller.Minecraft.Compatibility.IO
         {
             get;
             set;
+        }
+
+        public override bool CanRead
+        {
+            get { return stream.CanRead;  }
+        }
+
+        public override bool CanSeek
+        {
+            get { return stream.CanSeek; }
+        }
+
+        public override bool CanWrite
+        {
+            get { return stream.CanWrite}
+        }
+
+        public override void Flush()
+        {
+            stream.Flush();
+        }
+
+        public override long Length
+        {
+            get { return stream.Length; }
+        }
+
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            return stream.Read(buffer, offset, count);
+        }
+
+        public override long Seek(long offset, SeekOrigin origin)
+        {
+            return stream.Seek(offset, origin);
+        }
+
+        public override void SetLength(long value)
+        {
+            stream.SetLength(value);
+        }
+
+        public override void Write(byte[] buffer, int offset, int count)
+        {
+            if (Position + count > Limit)
+            {
+                count = Limit - Position;
+            }
+            Put(buffer, offset, count);
         }
     }
 }
