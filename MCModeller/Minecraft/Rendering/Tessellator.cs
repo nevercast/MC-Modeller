@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MCModeller.Minecraft.Compatibility.IO;
+using SharpGL;
+using SharpGL.Enumerations;
 
 namespace MCModeller.Minecraft.Rendering
 {
@@ -23,6 +25,8 @@ namespace MCModeller.Minecraft.Rendering
         /// Boolean used to check whether quads should be drawn as two triangles
         /// </summary>
         private static bool ConvertQuadsToTriangles = false;
+
+        private static bool TryVBO = false;
 
         /// <summary>
         /// GL Allocation Buffer
@@ -53,5 +57,91 @@ namespace MCModeller.Minecraft.Rendering
         private bool HsNormals = false;
 
         private int RawBufferIndex = 0;
+
+        private int AddedVerticies = 0;
+
+        private bool IsColorDisabled = false;
+
+        /// <summary>
+        /// Draw mode being used by the Tessellator
+        /// </summary>
+        public int DrawMode;
+
+        //TODO: Use Vertex if suitable
+
+        public double xOffset;
+
+        public double yOffset;
+
+        public double zOffset;
+
+        // How is an Integer a normal? Eugh
+        public int Normal;
+
+        public static Tessellator Instance = new Tessellator(2097152);
+
+        public bool IsDrawing = false;
+
+        private static bool UseVBO = false;
+
+        private static IntBuffer VertexBuffers;
+
+        private int VboIndex = 0;
+
+        private static int VboCount = 10;
+
+        private int BufferSize;
+
+        private Tessellator(int someUselessParameter)
+        {
+
+        }
+
+        /// <summary>
+        /// Public constructor
+        /// </summary>
+        public Tessellator()
+        {
+
+        }
+
+        static Tessellator()
+        {
+            Instance.DefaultTexture = true;
+            UseVBO = false; // For now, always false. Not used in MC and I'm not sure how to use it either
+
+            if (UseVBO)
+            {
+                VertexBuffers = new ByteBuffer(VboCount).IntBuffer;
+                // ARBVertexBufferObject.glGenBuffersARB(vertexBuffers);
+            }
+        }
+
+        public int Draw()
+        {
+            //TODO: IsDrawing should be IsTesselating? makes more sense in this context
+            if (!this.IsDrawing)
+            {
+                throw new InvalidOperationException("Not Tesselating!");
+            }
+            else
+            {
+                this.IsDrawing = false;
+                int offs = 0;
+                while (offs < VertexCount)
+                {
+                    int vtc = 0;
+                    if (DrawMode == 7 && ConvertQuadsToTriangles)
+                    {
+                        vtc = Math.Min(VertexCount - offs, TrivertsInBuffer);
+                    }
+                    else
+                    {
+                        vtc = Math.Min(VertexCount - offs, NativeBufferSize >> 5);
+                    }
+                    IntBuffer.Clear();
+                }
+            }
+        }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MCModeller.Minecraft.Compatibility.IO
 {
-    public class ByteBuffer
+    public class ByteBuffer : IOBuffer<byte>
     {
         private int size;
         private MemoryStream stream;
@@ -55,6 +55,41 @@ namespace MCModeller.Minecraft.Compatibility.IO
                     _floatWrapper = new FloatBuffer(this);
                 return _floatWrapper;
             }
+        }
+
+        public void Clear()
+        {
+            var position = Position;
+            stream.Close();
+            stream = new MemoryStream(size);
+            Position = position;
+
+        }
+
+        public void Put(byte[] data, int offset, int count)
+        {
+            stream.Write(data, offset, count);
+        }
+
+        public int Position
+        {
+            get
+            {
+                return (int)stream.Position;
+            }
+            set
+            {
+                if (value > Limit)
+                    stream.Position = Limit;
+                else
+                    stream.Position = value;
+            }
+        }
+
+        public int Limit
+        {
+            get;
+            set;
         }
     }
 }

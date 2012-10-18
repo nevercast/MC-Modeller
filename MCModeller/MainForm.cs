@@ -16,16 +16,15 @@ namespace MCModeller
         public MainForm()
         {
             InitializeComponent();
+            __openGLContext = openGLViewport.OpenGL;
         }
 
         #region OpenGL Context
-        private OpenGL __openGLContext;
-        public OpenGL GL
+        private static OpenGL __openGLContext;
+        public static OpenGL GL
         {
             get
             {
-                if (__openGLContext == null)
-                    __openGLContext = openGLViewport.OpenGL;
                 return __openGLContext;
             }
         }
