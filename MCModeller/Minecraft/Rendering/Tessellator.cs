@@ -166,7 +166,7 @@ namespace MCModeller.Minecraft.Rendering
                     if (HasColor)
                     {
                         ByteBuffer.Position = 20;
-                        //GL.Color(
+                        
                     }
                 }
             }
