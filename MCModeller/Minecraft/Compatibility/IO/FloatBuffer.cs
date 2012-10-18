@@ -50,5 +50,16 @@ namespace MCModeller.Minecraft.Compatibility.IO
                 Buffer.Limit = value;
             }
         }
+
+        public static implicit operator float[](FloatBuffer buffer)
+        {
+            float[] fBuffer = new float[buffer.Limit / 4];
+            byte[] data = buffer.Buffer.ToArray();
+            for (int i = 0; i < fBuffer.Length; i++)
+            {
+                fBuffer[i] = BitConverter.ToSingle(data, i * 4);
+            }
+            return fBuffer;
+        }
     }
 }

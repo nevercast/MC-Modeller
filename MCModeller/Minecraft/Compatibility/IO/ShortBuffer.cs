@@ -50,5 +50,16 @@ namespace MCModeller.Minecraft.Compatibility.IO
                 Buffer.Limit = value;
             }
         }
+
+        public static implicit operator short[](ShortBuffer buffer)
+        {
+            short[] sBuffer = new short[buffer.Limit / 2];
+            byte[] data = buffer.Buffer.ToArray();
+            for (int i = 0; i < sBuffer.Length; i++)
+            {
+                sBuffer[i] = BitConverter.ToInt16(data, i * 2);
+            }
+            return sBuffer;
+        }
     }
 }

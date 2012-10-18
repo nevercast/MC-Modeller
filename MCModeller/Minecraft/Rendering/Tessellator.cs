@@ -11,6 +11,11 @@ namespace MCModeller.Minecraft.Rendering
 {
     public class Tessellator
     {
+        public OpenGL GL
+        {
+            get { return MainForm.GL; }
+        }
+
         private static int NativeBufferSize = 0x200000;
         private static int TrivertsInBuffer = (NativeBufferSize / 48) * 6;
 
@@ -53,7 +58,7 @@ namespace MCModeller.Minecraft.Rendering
         private bool HasColor = false;
 
         private bool HasTexture = false;
-        private bool HsBrightness = false;
+        private bool HasBrightness = false;
         private bool HsNormals = false;
 
         private int RawBufferIndex = 0;
@@ -140,6 +145,29 @@ namespace MCModeller.Minecraft.Rendering
                         vtc = Math.Min(VertexCount - offs, NativeBufferSize >> 5);
                     }
                     IntBuffer.Clear();
+                    IntBuffer.Put(this.RawBuffer, offs * 8, vtc * 8);
+                    ByteBuffer.Position = 0;
+                    ByteBuffer.Limit = vtc * 32;
+                    offs += vtc;
+
+                    if (HasTexture)
+                    {
+                        FloatBuffer.Position = 3;
+                        /* Look ma, I reimplemented FloatBuffer when I could 
+                         * have just used Collection of float */
+                        GL.TexCoordPointer(2, OpenGL.GL_FLOAT, 32, FloatBuffer);
+                        GL.EnableClientState(OpenGL.GL_TEXTURE_COORD_ARRAY);
+                    }
+
+                    if(HasBrightness){
+                        //TODO: Implement light map
+                    }
+
+                    if (HasColor)
+                    {
+                        ByteBuffer.Position = 20;
+                        //GL.Color(
+                    }
                 }
             }
         }

@@ -152,5 +152,10 @@ namespace MCModeller.Minecraft.Compatibility.IO
             }
             Put(buffer, offset, count);
         }
+
+        internal byte[] ToArray()
+        {
+            return stream.ToArray();
+        }
     }
 }

@@ -52,5 +52,17 @@ namespace MCModeller.Minecraft.Compatibility.IO
                 Buffer.Limit = value;
             }
         }
+
+        public static implicit operator int[](IntBuffer buffer)
+        {
+            int[] iBuffer = new int[buffer.Limit / 4];
+            byte[] data = buffer.Buffer.ToArray();
+            for (int i = 0; i < iBuffer.Length; i++)
+            {
+                iBuffer[i] = BitConverter.ToInt32(data, i * 4);
+            }
+            return iBuffer;
+        }
+
     }
 }

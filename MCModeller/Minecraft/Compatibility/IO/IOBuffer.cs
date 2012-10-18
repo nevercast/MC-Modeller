@@ -32,5 +32,7 @@ namespace MCModeller.Minecraft.Compatibility.IO
         /// If position is higher than limit it's set to limit
         /// </summary>
         int Limit { get; set; }
+
+
     }
 }
