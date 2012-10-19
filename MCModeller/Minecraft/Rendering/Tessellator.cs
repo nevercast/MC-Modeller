@@ -8,7 +8,7 @@ using SharpGL.Enumerations;
 
 namespace MCModeller.Minecraft.Rendering
 {
-    public class Tessellator
+    public class Tessellator : ITessellator
     {
         public OpenGL GL
         {
@@ -148,17 +148,13 @@ namespace MCModeller.Minecraft.Rendering
                     }
                     Array.Copy(this.RawBuffer, offs *8, IntBuffer, 
                         
-                        ut(this.RawBuffer, offs * 8, vtc * 8);
-                    ByteBuffer.Position = 0;
-                    ByteBuffer.Limit = vtc * 32;
                     offs += vtc;
 
                     if (HasTexture)
                     {
-                        FloatBuffer.Position = 3;
                         /* Look ma, I reimplemented FloatBuffer when I could 
                          * have just used Collection of float */
-                        GL.TexCoordPointer(2, OpenGL.GL_FLOAT, 32, FloatBuffer);
+                        GL.TexCoordPointer(2, OpenGL.GL_FLOAT, 32, );
                         GL.EnableClientState(OpenGL.GL_TEXTURE_COORD_ARRAY);
                         
                     }
@@ -174,6 +170,87 @@ namespace MCModeller.Minecraft.Rendering
                     }
                 }
             }
+        }
+
+
+        public void AddTranslation(float x, float y, float z)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddVertex(double x, double y, double z)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AddVertexWithUV(double x, double y, double z, double textureU, double textureV)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisableColor()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetBrightness(int brightness)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetColorOpaque(int r, int g, int b)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetColorOpaque_F(float r, float g, float b)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetColorOpaque_I(int color)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetColorRGBA(int r, int g, int b, int a)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetColorRGBA_F(float r, float g, float b, float a)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetColorRGBA_I(int color, int alpha)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetNormal(float x, float y, float z)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetTextureUV(double textureU, double textureV)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SetTranslation(double x, double y, double z)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void StartDrawing(int mode)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void StartDrawingQuads()
+        {
+            throw new NotImplementedException();
         }
     }
 }

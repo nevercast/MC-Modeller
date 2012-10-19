@@ -1,0 +1,14 @@
+﻿Vertex Layout
+
+0  float x
+4  float y
+8  float z
+12 float textureU
+16 float textureV
+20 byte red
+21 byte green
+22 byte blue
+23 byte alpha
+24 float normalX
+28 float normalY
+32 float normalZ
