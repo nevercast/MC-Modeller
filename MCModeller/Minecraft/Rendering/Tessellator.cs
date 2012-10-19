@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MCModeller.Minecraft.Compatibility.IO;
 using SharpGL;
 using SharpGL.Enumerations;
 
@@ -16,6 +15,7 @@ namespace MCModeller.Minecraft.Rendering
             get { return MainForm.GL; }
         }
 
+        /* Why so damn big */
         private static int NativeBufferSize = 0x200000;
         private static int TrivertsInBuffer = (NativeBufferSize / 48) * 6;
 
@@ -33,13 +33,15 @@ namespace MCModeller.Minecraft.Rendering
 
         private static bool TryVBO = false;
 
+
+        //TODO: Optimize the buffer system
         /// <summary>
         /// GL Allocation Buffer
         /// </summary>
-        private static ByteBuffer ByteBuffer = ByteBuffer.Allocate(NativeBufferSize * 4);
-        private static IntBuffer IntBuffer = ByteBuffer.IntBuffer;
-        private static FloatBuffer FloatBuffer = ByteBuffer.FloatBuffer;
-        private static ShortBuffer ShortBuffer = ByteBuffer.ShortBuffer;
+        private static Buffer ByteBuffer = new byte[NativeBufferSize * 4];
+        private static int[] IntBuffer = new int[NativeBufferSize];
+        private static float[] FloatBuffer = new float[NativeBufferSize];
+        private static short[] ShortBuffer = new short[NativeBufferSize * 2];
 
         /// <summary>
         /// Raw Integer Array
@@ -89,7 +91,7 @@ namespace MCModeller.Minecraft.Rendering
 
         private static bool UseVBO = false;
 
-        private static IntBuffer VertexBuffers;
+        private static int[] VertexBuffers;
 
         private int VboIndex = 0;
 
@@ -117,7 +119,7 @@ namespace MCModeller.Minecraft.Rendering
 
             if (UseVBO)
             {
-                VertexBuffers = new ByteBuffer(VboCount).IntBuffer;
+                VertexBuffers = new int[VboCount];
                 // ARBVertexBufferObject.glGenBuffersARB(vertexBuffers);
             }
         }
@@ -144,8 +146,9 @@ namespace MCModeller.Minecraft.Rendering
                     {
                         vtc = Math.Min(VertexCount - offs, NativeBufferSize >> 5);
                     }
-                    IntBuffer.Clear();
-                    IntBuffer.Put(this.RawBuffer, offs * 8, vtc * 8);
+                    Array.Copy(this.RawBuffer, offs *8, IntBuffer, 
+                        
+                        ut(this.RawBuffer, offs * 8, vtc * 8);
                     ByteBuffer.Position = 0;
                     ByteBuffer.Limit = vtc * 32;
                     offs += vtc;
@@ -157,6 +160,7 @@ namespace MCModeller.Minecraft.Rendering
                          * have just used Collection of float */
                         GL.TexCoordPointer(2, OpenGL.GL_FLOAT, 32, FloatBuffer);
                         GL.EnableClientState(OpenGL.GL_TEXTURE_COORD_ARRAY);
+                        
                     }
 
                     if(HasBrightness){
