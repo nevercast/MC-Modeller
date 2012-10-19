@@ -17,6 +17,7 @@ namespace MCModeller.Minecraft.Rendering
 
         /* Why so damn big */
         private static int NativeBufferSize = 0x200000;
+        /* Why for you divide, is this obfus' code ? */
         private static int TrivertsInBuffer = (NativeBufferSize / 48) * 6;
 
         public static bool RenderingWorldRenderer = false;
@@ -50,8 +51,8 @@ namespace MCModeller.Minecraft.Rendering
 
         private int VertexCount = 0;
 
-        private double TextureU;
-        private double TextureV;
+        private float TextureU;
+        private float TextureV;
 
         private int Brightness;
 
@@ -61,7 +62,7 @@ namespace MCModeller.Minecraft.Rendering
 
         private bool HasTexture = false;
         private bool HasBrightness = false;
-        private bool HsNormals = false;
+        private bool HasNormals = false;
 
         private int RawBufferIndex = 0;
 
@@ -85,6 +86,7 @@ namespace MCModeller.Minecraft.Rendering
         // How is an Integer a normal? Eugh
         public int Normal;
 
+        /* Pointless parameter is pointless */
         public static Tessellator Instance = new Tessellator(2097152);
 
         public bool IsDrawing = false;
@@ -166,16 +168,19 @@ namespace MCModeller.Minecraft.Rendering
                     if (HasColor)
                     {
                         ByteBuffer.Position = 20;
-                        
+                        GL.NormalPointer(
                     }
                 }
+                
             }
         }
 
 
         public void AddTranslation(float x, float y, float z)
         {
-            throw new NotImplementedException();
+            this.xOffset += x;
+            this.yOffset += y;
+            this.zOffset += z;
         }
 
         public void AddVertex(double x, double y, double z)
@@ -190,57 +195,99 @@ namespace MCModeller.Minecraft.Rendering
 
         public void DisableColor()
         {
-            throw new NotImplementedException();
+            this.IsColorDisabled = true;
         }
 
         public void SetBrightness(int brightness)
         {
-            throw new NotImplementedException();
+            this.HasBrightness = true;
+            this.Brightness = brightness;
         }
 
         public void SetColorOpaque(int r, int g, int b)
         {
-            throw new NotImplementedException();
+            this.SetColorRGBA(r, g, b, 255);
         }
 
         public void SetColorOpaque_F(float r, float g, float b)
         {
-            throw new NotImplementedException();
+            this.SetColorOpaque((int)(r * 255.0F), (int)(g * 255.0F), (int)(b * 255.0F));
         }
 
         public void SetColorOpaque_I(int color)
         {
-            throw new NotImplementedException();
+            //TODO: Confirm this bit order, endianness again
+            int red = color >> 16 & 255;
+            int green = color >> 8 & 255;
+            int blue = color & 255;
+            this.SetColorOpaque(red, green, blue);
         }
 
         public void SetColorRGBA(int r, int g, int b, int a)
         {
-            throw new NotImplementedException();
+            if (!this.IsColorDisabled)
+            {
+                if (r < 0)
+                    r = 0;
+                if (g < 0)
+                    g = 0;
+                if (b < 0)
+                    b = 0;
+                if (a < 0)
+                    a = 0;
+                if (a > 255)
+                    a = 255;
+                if (b > 255)
+                    b = 255;
+                if (g > 255)
+                    g = 255;
+                if (r > 255)
+                    g = 255;
+                this.HasColor = true;
+                // TODO: Confirm this bit order code
+                // Java is an opossing bit order to C#
+                if (BitConverter.IsLittleEndian)
+                {
+                    this.Color = a << 24 | b << 16 | g << 8 | r;
+                }
+                else
+                {
+                    this.Color = r << 24 | g << 16 | b << 8 | a;
+                }
+            }
         }
 
         public void SetColorRGBA_F(float r, float g, float b, float a)
         {
-            throw new NotImplementedException();
+            this.SetColorRGBA((int)(r * 255.0F), (int)(g * 255.0F), (int)(b * 255.0F), (int)(a * 255.0F));
         }
 
         public void SetColorRGBA_I(int color, int alpha)
         {
-            throw new NotImplementedException();
+            //TODO: Confirm this bit order, endian
+            int red = color >> 16 & 255;
+            int green = color >> 8 & 255;
+            int blue = color & 255;
+            this.SetColorRGBA(red, green, blue, alpha);
         }
 
         public void SetNormal(float x, float y, float z)
         {
-            throw new NotImplementedException();
+            //this.HasNormals = true;
+            //TODO: Confirm normal code.
         }
 
-        public void SetTextureUV(double textureU, double textureV)
+        public void SetTextureUV(float textureU, float textureV)
         {
-            throw new NotImplementedException();
+            this.TextureU = textureU;
+            this.TextureV = textureV;
         }
 
         public void SetTranslation(double x, double y, double z)
         {
-            throw new NotImplementedException();
+            this.xOffset = x;
+            this.yOffset = y;
+            this.zOffset = z;
         }
 
         public void StartDrawing(int mode)
