@@ -15,15 +15,13 @@ namespace MCModeller.Minecraft.Rendering
             get { return MainForm.GL; }
         }
 
-        /* Why so damn big */
-        private static int NativeBufferSize = 0x200000;
-        /* Why for you divide, is this obfus' code ? */
-        private static int TrivertsInBuffer = (NativeBufferSize / 48) * 6;
+        /* Initial size of the vertex buffer */
+        private const int BUFFER_INITIALSIZE = 1024;
+        /* Expand constant - Not used */
+        private const int BUFFER_EXPANDINCREMENT = 32;
 
         public static bool RenderingWorldRenderer = false;
         public bool DefaultTexture = false;
-        
-        private int RawBufferSize = 0;
 
         public int TextureID = 0;
 
@@ -32,15 +30,12 @@ namespace MCModeller.Minecraft.Rendering
         /// </summary>
         private static bool ConvertQuadsToTriangles = false;
 
-        private static bool TryVBO = false;
-
 
         //TODO: Optimize the buffer system
         /// <summary>
         /// GL Allocation Buffer
         /// </summary>
-
-        private TessellatorVertex[] VertexBuffer;
+        
 
         private int VertexCount = 0;
 
@@ -56,8 +51,6 @@ namespace MCModeller.Minecraft.Rendering
         private bool HasTexture = false;
         private bool HasBrightness = false;
         private bool HasNormals = false;
-
-        private int RawBufferIndex = 0;
 
         private int AddedVerticies = 0;
 
@@ -76,19 +69,16 @@ namespace MCModeller.Minecraft.Rendering
 
         public double zOffset;
 
-        // How is an Integer a normal? Eugh
         public int Normal;
 
         /* Pointless parameter is pointless */
         public static Tessellator Instance = new Tessellator(2097152);
 
         public bool IsTessellating = false;
-
-        private static bool UseVBO = false;
-
+        
         private Tessellator(int someUselessParameter)
         {
-
+            
         }
 
         /// <summary>
@@ -102,7 +92,6 @@ namespace MCModeller.Minecraft.Rendering
         static Tessellator()
         {
             Instance.DefaultTexture = true;
-            UseVBO = false; // For now, always false. Not used in MC and I'm not sure how to use it either
         }
 
         /// <summary>
@@ -125,40 +114,7 @@ namespace MCModeller.Minecraft.Rendering
             else
             {
                 this.IsTessellating = false;
-                int VertexIndex = 0;
-                while (VertexIndex < VertexCount)
-                {
-                    int vtc = 0;
-                    if (DrawMode == OpenGL.GL_QUADS && ConvertQuadsToTriangles)
-                    {
-                        vtc = Math.Min(VertexCount - VertexIndex, TrivertsInBuffer);
-                    }
-                    else
-                    {
-                        vtc = Math.Min(VertexCount - VertexIndex, NativeBufferSize >> 5);
-                    }
-                        
-                    VertexIndex += vtc;
-
-                    if (HasTexture)
-                    {
-                        GL.TexCoordPointer(2, OpenGL.GL_FLOAT, 32, );
-                        GL.EnableClientState(OpenGL.GL_TEXTURE_COORD_ARRAY);
-
-                        
-                    }
-
-                    if(HasBrightness){
-                        //TODO: Implement light map
-                    }
-
-                    if (HasColor)
-                    {
-                        ByteBuffer.Position = 20;
-                        GL.NormalPointer(
-                    }
-                }
-                
+                return 0;
             }
         }
 
@@ -172,7 +128,50 @@ namespace MCModeller.Minecraft.Rendering
 
         public void AddVertex(double x, double y, double z)
         {
-            throw new NotImplementedException();
+            /* Buffer Initialized ? */
+            if (VertexBuffer == null)
+            {
+                /* Create Buffer */
+                VertexBuffer = new TessellatorVertex[BUFFER_INITIALSIZE];
+            } /* Buffer too small */
+            else if (VertexCount > VertexBuffer.Length - 1)
+            {
+                /* Double the size */
+                //TODO: Consider optimizing this
+                var buf = new TessellatorVertex[VertexBuffer.Length * 2];
+                Array.Copy(VertexBuffer, buf, VertexBuffer.Length);
+                VertexBuffer = buf;
+            }
+            ++AddedVerticies;
+
+            /* Convert 4 verticies to a quad */
+            if (this.DrawMode == OpenGL.GL_QUADS && ConvertQuadsToTriangles && AddedVerticies % 4 == 0)
+            {
+                //TODO: Implement all the quad codes
+            }
+
+            var vertex = new TessellatorVertex();
+            if (HasTexture)
+            {
+                vertex.textureU = this.TextureU;
+                vertex.textureV = this.TextureV;
+            }
+            if (HasBrightness)
+            {
+                vertex.brightness = this.Brightness;
+            }
+            if (HasColor)
+            {
+                vertex.color = this.Color;
+            }
+            if (this.HasNormals)
+            {
+                vertex.normal = this.Normal;
+            }
+            vertex.x = (float)(xOffset + x);
+            vertex.y = (float)(yOffset + y);
+            vertex.z = (float)(zOffset + z);
+            
         }
 
         public void AddVertexWithUV(double x, double y, double z, double textureU, double textureV)
