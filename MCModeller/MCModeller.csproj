@@ -60,7 +60,9 @@
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Minecraft\Rendering\ITessellator.cs" />
+    <Compile Include="Minecraft\Rendering\RendererUtil.cs" />
     <Compile Include="Minecraft\Rendering\Tessellator.cs" />
+    <Compile Include="Minecraft\Rendering\TessellatorVertex.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainForm.resx">
@@ -92,6 +94,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Information\Faces.txt" />
     <Content Include="Information\Vertex Layout.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

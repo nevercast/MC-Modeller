@@ -16,9 +16,9 @@ namespace MCModeller.Minecraft.Rendering
         void SetColorRGBA_F(float r, float g, float b, float a);
         void SetColorRGBA_I(int color, int alpha);
         void SetNormal(float x, float y, float z);
-        void SetTextureUV(double textureU, double textureV);
+        void SetTextureUV(float textureU, float textureV);
         void SetTranslation(double x, double y, double z);
-        void StartDrawing(int mode);
-        void StartDrawingQuads();
+        void StartTessellating(uint mode);
+        void StartTessellatingQuads();
     }
 }

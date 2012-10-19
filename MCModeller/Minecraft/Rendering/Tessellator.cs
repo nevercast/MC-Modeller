@@ -39,15 +39,8 @@ namespace MCModeller.Minecraft.Rendering
         /// <summary>
         /// GL Allocation Buffer
         /// </summary>
-        private static Buffer ByteBuffer = new byte[NativeBufferSize * 4];
-        private static int[] IntBuffer = new int[NativeBufferSize];
-        private static float[] FloatBuffer = new float[NativeBufferSize];
-        private static short[] ShortBuffer = new short[NativeBufferSize * 2];
 
-        /// <summary>
-        /// Raw Integer Array
-        /// </summary>
-        private int[] RawBuffer;
+        private TessellatorVertex[] VertexBuffer;
 
         private int VertexCount = 0;
 
@@ -73,7 +66,7 @@ namespace MCModeller.Minecraft.Rendering
         /// <summary>
         /// Draw mode being used by the Tessellator
         /// </summary>
-        public int DrawMode;
+        public uint DrawMode;
 
         //TODO: Use Vertex if suitable
 
@@ -89,17 +82,9 @@ namespace MCModeller.Minecraft.Rendering
         /* Pointless parameter is pointless */
         public static Tessellator Instance = new Tessellator(2097152);
 
-        public bool IsDrawing = false;
+        public bool IsTessellating = false;
 
         private static bool UseVBO = false;
-
-        private static int[] VertexBuffers;
-
-        private int VboIndex = 0;
-
-        private static int VboCount = 10;
-
-        private int BufferSize;
 
         private Tessellator(int someUselessParameter)
         {
@@ -118,46 +103,48 @@ namespace MCModeller.Minecraft.Rendering
         {
             Instance.DefaultTexture = true;
             UseVBO = false; // For now, always false. Not used in MC and I'm not sure how to use it either
+        }
 
-            if (UseVBO)
-            {
-                VertexBuffers = new int[VboCount];
-                // ARBVertexBufferObject.glGenBuffersARB(vertexBuffers);
-            }
+        /// <summary>
+        /// Resets the state
+        /// </summary>
+        private void Reset()
+        {
+            this.VertexCount = 0;
+            /* TODO: Clear the buffer */
+            this.AddedVerticies = 0;
         }
 
         public int Draw()
         {
             //TODO: IsDrawing should be IsTesselating? makes more sense in this context
-            if (!this.IsDrawing)
+            if (!this.IsTessellating)
             {
                 throw new InvalidOperationException("Not Tesselating!");
             }
             else
             {
-                this.IsDrawing = false;
-                int offs = 0;
-                while (offs < VertexCount)
+                this.IsTessellating = false;
+                int VertexIndex = 0;
+                while (VertexIndex < VertexCount)
                 {
                     int vtc = 0;
-                    if (DrawMode == 7 && ConvertQuadsToTriangles)
+                    if (DrawMode == OpenGL.GL_QUADS && ConvertQuadsToTriangles)
                     {
-                        vtc = Math.Min(VertexCount - offs, TrivertsInBuffer);
+                        vtc = Math.Min(VertexCount - VertexIndex, TrivertsInBuffer);
                     }
                     else
                     {
-                        vtc = Math.Min(VertexCount - offs, NativeBufferSize >> 5);
+                        vtc = Math.Min(VertexCount - VertexIndex, NativeBufferSize >> 5);
                     }
-                    Array.Copy(this.RawBuffer, offs *8, IntBuffer, 
                         
-                    offs += vtc;
+                    VertexIndex += vtc;
 
                     if (HasTexture)
                     {
-                        /* Look ma, I reimplemented FloatBuffer when I could 
-                         * have just used Collection of float */
                         GL.TexCoordPointer(2, OpenGL.GL_FLOAT, 32, );
                         GL.EnableClientState(OpenGL.GL_TEXTURE_COORD_ARRAY);
+
                         
                     }
 
@@ -290,14 +277,28 @@ namespace MCModeller.Minecraft.Rendering
             this.zOffset = z;
         }
 
-        public void StartDrawing(int mode)
+        public void StartTessellating(uint mode)
         {
-            throw new NotImplementedException();
+            if (this.IsTessellating)
+            {
+                throw new InvalidOperationException("Already Tesselating!");
+            }
+            else
+            {
+                this.IsTessellating = true;
+                this.Reset();
+                this.DrawMode = mode;
+                this.HasNormals = false;
+                this.HasColor = false;
+                this.HasTexture = false;
+                this.HasBrightness = false;
+                this.IsColorDisabled = false;
+            }
         }
 
-        public void StartDrawingQuads()
+        public void StartTessellatingQuads()
         {
-            throw new NotImplementedException();
+            this.StartTessellating(OpenGL.GL_QUADS);
         }
     }
 }
