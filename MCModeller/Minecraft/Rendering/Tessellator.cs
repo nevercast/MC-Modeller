@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using SharpGL;
@@ -16,9 +17,9 @@ namespace MCModeller.Minecraft.Rendering
         }
 
         /* Initial size of the vertex buffer */
-        private const int BUFFER_INITIALSIZE = 1024;
-        /* Expand constant - Not used */
-        private const int BUFFER_EXPANDINCREMENT = 32;
+        private const int BUFFER_INITIALSIZE = 1000;
+
+        private TessellatorVertex Vertex;
 
         public static bool RenderingWorldRenderer = false;
         public bool DefaultTexture = false;
@@ -31,11 +32,10 @@ namespace MCModeller.Minecraft.Rendering
         private static bool ConvertQuadsToTriangles = false;
 
 
-        //TODO: Optimize the buffer system
         /// <summary>
         /// GL Allocation Buffer
         /// </summary>
-        
+        TessellatorVertex[] VertexBuffer;
 
         private int VertexCount = 0;
 
@@ -76,7 +76,7 @@ namespace MCModeller.Minecraft.Rendering
 
         public bool IsTessellating = false;
         
-        private Tessellator(int someUselessParameter)
+        private Tessellator(int someUselessParameter) :this()
         {
             
         }
@@ -86,7 +86,12 @@ namespace MCModeller.Minecraft.Rendering
         /// </summary>
         public Tessellator()
         {
-
+            /* Buffer Initialized ? */
+            if (VertexBuffer == null)
+            {
+                /* Create Buffer */
+                VertexBuffer = new TessellatorVertex[BUFFER_INITIALSIZE];
+            }
         }
 
         static Tessellator()
@@ -113,8 +118,65 @@ namespace MCModeller.Minecraft.Rendering
             }
             else
             {
+                /* Pin buffer */
+                var bufferHandle = GCHandle.Alloc(VertexBuffer, (GCHandleType.Pinned));
+                var stride = Marshal.SizeOf(typeof(TessellatorVertex)); /* 32 */
+                var pointer = bufferHandle.AddrOfPinnedObject();
+
                 this.IsTessellating = false;
-                return 0;
+                if (this.HasTexture)
+                {
+                    GL.TexCoordPointer(2, OpenGL.GL_FLOAT, stride, pointer + 12);
+                    GL.EnableClientState(OpenGL.GL_TEXTURE_COORD_ARRAY);
+                }
+                if (this.HasBrightness)
+                {
+                    //TODO: Brightness
+                }
+                if (this.HasColor)
+                {
+                    GL.ColorPointer(4, OpenGL.GL_UNSIGNED_BYTE, stride, pointer + 20);
+                    GL.EnableClientState(OpenGL.GL_COLOR_ARRAY);
+                }
+                if (this.HasNormals)
+                {
+                    GL.NormalPointer(OpenGL.GL_UNSIGNED_BYTE, stride, pointer + 24);
+                    GL.EnableClientState(OpenGL.GL_NORMAL_ARRAY);
+                }
+                GL.VertexPointer(3, OpenGL.GL_FLOAT, stride, pointer);
+                GL.EnableClientState(OpenGL.GL_VERTEX_ARRAY);
+
+                if (this.DrawMode == OpenGL.GL_QUADS && ConvertQuadsToTriangles)
+                {
+                    GL.DrawArrays(OpenGL.GL_TRIANGLES, 0, VertexCount);
+                }
+                else
+                {
+                    GL.DrawArrays(DrawMode, 0, VertexCount);
+                }
+
+                GL.DisableClientState(OpenGL.GL_VERTEX_ARRAY);
+                if (this.HasTexture)
+                {
+                    GL.DisableClientState(OpenGL.GL_TEXTURE_COORD_ARRAY);
+                }
+                if (this.HasBrightness)
+                {
+                    //TODO: Brightness
+                }
+                if (this.HasColor)
+                {
+                    GL.DisableClientState(OpenGL.GL_COLOR_ARRAY);
+                }
+                if (this.HasNormals)
+                {
+                    GL.DisableClientState(OpenGL.GL_NORMAL_ARRAY);
+                }
+
+                bufferHandle.Free();
+                var vtc = VertexCount;
+                this.Reset();
+                return vtc;                
             }
         }
 
@@ -128,21 +190,16 @@ namespace MCModeller.Minecraft.Rendering
 
         public void AddVertex(double x, double y, double z)
         {
-            /* Buffer Initialized ? */
-            if (VertexBuffer == null)
+            /* Buffer too small */
+            if (VertexCount > VertexBuffer.Length - 1)
             {
-                /* Create Buffer */
-                VertexBuffer = new TessellatorVertex[BUFFER_INITIALSIZE];
-            } /* Buffer too small */
-            else if (VertexCount > VertexBuffer.Length - 1)
-            {
-                /* Double the size */
-                //TODO: Consider optimizing this
-                var buf = new TessellatorVertex[VertexBuffer.Length * 2];
-                Array.Copy(VertexBuffer, buf, VertexBuffer.Length);
-                VertexBuffer = buf;
+                var tmpBuffer = new TessellatorVertex[VertexBuffer.Length * 2];
+                Array.Copy(VertexBuffer, tmpBuffer, VertexBuffer.Length);
+                VertexBuffer = tmpBuffer;
             }
             ++AddedVerticies;
+
+            Vertex = new TessellatorVertex();
 
             /* Convert 4 verticies to a quad */
             if (this.DrawMode == OpenGL.GL_QUADS && ConvertQuadsToTriangles && AddedVerticies % 4 == 0)
@@ -150,28 +207,28 @@ namespace MCModeller.Minecraft.Rendering
                 //TODO: Implement all the quad codes
             }
 
-            var vertex = new TessellatorVertex();
             if (HasTexture)
             {
-                vertex.textureU = this.TextureU;
-                vertex.textureV = this.TextureV;
+                Vertex.textureU = this.TextureU;
+                Vertex.textureV = this.TextureV;
             }
             if (HasBrightness)
             {
-                vertex.brightness = this.Brightness;
+                Vertex.brightness = this.Brightness;
             }
             if (HasColor)
             {
-                vertex.color = this.Color;
+                Vertex.color = this.Color;
             }
             if (this.HasNormals)
             {
-                vertex.normal = this.Normal;
+                Vertex.normal = this.Normal;
             }
-            vertex.x = (float)(xOffset + x);
-            vertex.y = (float)(yOffset + y);
-            vertex.z = (float)(zOffset + z);
-            
+            Vertex.x = (float)(xOffset + x);
+            Vertex.y = (float)(yOffset + y);
+            Vertex.z = (float)(zOffset + z);
+
+            VertexBuffer[VertexCount++] = Vertex;
         }
 
         public void AddVertexWithUV(double x, double y, double z, double textureU, double textureV)

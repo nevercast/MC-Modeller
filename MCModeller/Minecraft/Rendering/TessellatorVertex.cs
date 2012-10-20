@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 
 namespace MCModeller.Minecraft.Rendering
 {
+    /* Not sure if I'll use this yet */
+
     [StructLayout(LayoutKind.Explicit, Size = 32)]
     public unsafe struct TessellatorVertex
     {

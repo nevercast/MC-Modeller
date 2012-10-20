@@ -15,17 +15,19 @@ namespace MCModeller
     {
         public MainForm()
         {
+            Instance = this;
             InitializeComponent();
-            __openGLContext = openGLViewport.OpenGL;
         }
 
         #region OpenGL Context
-        private static OpenGL __openGLContext;
+
+        public static MainForm Instance { get; private set; }
+
         public static OpenGL GL
         {
             get
             {
-                return __openGLContext;
+                return Instance.openGLViewport.OpenGL;
             }
         }
 
@@ -40,40 +42,23 @@ namespace MCModeller
 
             //  Load the identity matrix.
             GL.LoadIdentity();
-
-            //  Rotate around the Y axis.
-            GL.Rotate(rotation, 0.0f, 1.0f, 0.0f);
+            
+            var tessellator = Minecraft.Rendering.Tessellator.Instance;
 
             //  Draw a coloured pyramid.
-            GL.Begin(OpenGL.GL_TRIANGLES);
-            GL.Color(1.0f, 0.0f, 0.0f);
-            GL.Vertex(0.0f, 1.0f, 0.0f);
-            GL.Color(0.0f, 1.0f, 0.0f);
-            GL.Vertex(-1.0f, -1.0f, 1.0f);
-            GL.Color(0.0f, 0.0f, 1.0f);
-            GL.Vertex(1.0f, -1.0f, 1.0f);
-            GL.Color(1.0f, 0.0f, 0.0f);
-            GL.Vertex(0.0f, 1.0f, 0.0f);
-            GL.Color(0.0f, 0.0f, 1.0f);
-            GL.Vertex(1.0f, -1.0f, 1.0f);
-            GL.Color(0.0f, 1.0f, 0.0f);
-            GL.Vertex(1.0f, -1.0f, -1.0f);
-            GL.Color(1.0f, 0.0f, 0.0f);
-            GL.Vertex(0.0f, 1.0f, 0.0f);
-            GL.Color(0.0f, 1.0f, 0.0f);
-            GL.Vertex(1.0f, -1.0f, -1.0f);
-            GL.Color(0.0f, 0.0f, 1.0f);
-            GL.Vertex(-1.0f, -1.0f, -1.0f);
-            GL.Color(1.0f, 0.0f, 0.0f);
-            GL.Vertex(0.0f, 1.0f, 0.0f);
-            GL.Color(0.0f, 0.0f, 1.0f);
-            GL.Vertex(-1.0f, -1.0f, -1.0f);
-            GL.Color(0.0f, 1.0f, 0.0f);
-            GL.Vertex(-1.0f, -1.0f, 1.0f);
-            GL.End();
+           // GL.Begin(OpenGL.GL_TRIANGLES);
+            try
+            {
+                tessellator.StartTessellating(OpenGL.GL_TRIANGLES);
+                tessellator.SetColorRGBA(255, 255, 255, 255);
 
-            //  Nudge the rotation.
-            rotation += 3.0f;
+                tessellator.AddVertex(0, 1, 0);
+                tessellator.AddVertex(-1, 0, 0);
+                tessellator.AddVertex(1, 0, 0);
+                tessellator.Draw();
+            }
+            catch (Exception ex) { }
+            GL.Finish();
         }
 
         private void openGLViewport_Resized(object sender, EventArgs e)

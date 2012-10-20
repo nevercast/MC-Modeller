@@ -34,6 +34,35 @@ namespace MCModeller.Minecraft.Rendering
             }
         }
 
+        public void Expand(int newSize)
+        {
+            if (newSize <= Size) return;
+            /* Create managed buffer */
+            byte[] buffer = new byte[Size];
+            /* Marshal data over */
+            Marshal.Copy(Pointer, buffer, 0, Size);
+            /* Release the native handle */
+            Marshal.FreeHGlobal(Pointer);
+            /* Set new size */
+            Size = newSize;
+            /* Reallocate native handle */
+            Pointer = Marshal.AllocHGlobal(Size);
+            /* Copy data in to new allocation */
+            Marshal.Copy(buffer, 0, Pointer, buffer.Length);
+        }
+
+        public void AppendInteger(int value)
+        {
+            Integer = value;
+            Index++;
+        }
+
+        public void AppendFloat(float value)
+        {
+            Float = value;
+            Index++;
+        }
+
         public int Integer
         {
             get {

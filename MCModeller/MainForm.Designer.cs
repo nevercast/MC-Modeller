@@ -43,7 +43,7 @@
             this.openGLViewport.FrameRate = 20;
             this.openGLViewport.Location = new System.Drawing.Point(200, 0);
             this.openGLViewport.Name = "openGLViewport";
-            this.openGLViewport.RenderContextType = SharpGL.RenderContextType.DIBSection;
+            this.openGLViewport.RenderContextType = SharpGL.RenderContextType.NativeWindow;
             this.openGLViewport.Size = new System.Drawing.Size(469, 557);
             this.openGLViewport.TabIndex = 0;
             this.openGLViewport.OpenGLInitialized += new System.EventHandler(this.openGLViewport_OpenGLInitialized);
