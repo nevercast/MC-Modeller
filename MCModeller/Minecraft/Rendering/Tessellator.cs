@@ -231,9 +231,10 @@ namespace MCModeller.Minecraft.Rendering
             VertexBuffer[VertexCount++] = Vertex;
         }
 
-        public void AddVertexWithUV(double x, double y, double z, double textureU, double textureV)
+        public void AddVertexWithUV(double x, double y, double z, float textureU, float textureV)
         {
-            throw new NotImplementedException();
+            this.SetTextureUV(textureU, textureV);
+            this.AddVertex(x, y, z);
         }
 
         public void DisableColor()
