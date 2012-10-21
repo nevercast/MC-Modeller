@@ -316,8 +316,11 @@ namespace MCModeller.Minecraft.Rendering
 
         public void SetNormal(float x, float y, float z)
         {
-            //this.HasNormals = true;
-            //TODO: Confirm normal code.
+            this.HasNormals = true;
+            byte xByte = (byte)(x * 255);
+            byte yByte = (byte)(y * 255);
+            byte zByte = (byte)(z * 255);
+            this.Normal = xByte & 255 | (yByte & 255) << 8 | (zByte & 255) << 16;
         }
 
         public void SetTextureUV(float textureU, float textureV)
