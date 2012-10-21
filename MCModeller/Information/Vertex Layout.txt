@@ -1,4 +1,4 @@
-﻿Vertex Layout
+﻿Vertex Format Layout
 
 0  float x
 4  float y
@@ -12,3 +12,17 @@
 24 float normalX
 28 float normalY
 32 float normalZ
+
+
+
+
+Quad Vertex Order
+
+. 2 ----  <  ---- . 1
+
+\/   Quads Layout
+
+. 3 ----  >  ---- . 4
+
+
+The Normal is out of the screen towards the observer
