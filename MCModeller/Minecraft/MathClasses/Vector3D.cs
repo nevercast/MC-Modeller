@@ -86,7 +86,7 @@ namespace MCModeller.Minecraft.MathClasses
         public Vector3D normalize()
         {
             double var1 = (double)MathHelper.SqrtD(this.X * this.X + this.Y * this.Y + this.Z * this.Z);
-            return var1 < 1.0E-4D ? VectorPool().getVecFromPool(0.0D, 0.0D, 0.0D) : VectorPool().getVecFromPool(this.X / var1, this.Y / var1, this.Z / var1);
+            return var1 < 1.0E-4D ? VectorPool.getVecFromPool(0.0D, 0.0D, 0.0D) : VectorPool.getVecFromPool(this.X / var1, this.Y / var1, this.Z / var1);
         }
 
         public double dotProduct(Vector3D par1Vec3)
@@ -99,14 +99,14 @@ namespace MCModeller.Minecraft.MathClasses
          */
         public Vector3D subtract(Vector3D par1Vec3)
         {
-            return VectorPool().getVecFromPool(par1Vec3.X - this.X, par1Vec3.Y - this.Y, par1Vec3.Z - this.Z);
+            return VectorPool.getVecFromPool(par1Vec3.X - this.X, par1Vec3.Y - this.Y, par1Vec3.Z - this.Z);
         }
         /**
          * Returns a new vector with the result of this vector x the specified vector.
          */
         public Vector3D crossProduct(Vector3D par1Vec3)
         {
-            return VectorPool().getVecFromPool(this.Y * par1Vec3.Z - this.Z * par1Vec3.Y, this.Z * par1Vec3.X - this.X * par1Vec3.Z, this.X * par1Vec3.Y - this.Y * par1Vec3.X);
+            return VectorPool.getVecFromPool(this.Y * par1Vec3.Z - this.Z * par1Vec3.Y, this.Z * par1Vec3.X - this.X * par1Vec3.Z, this.X * par1Vec3.Y - this.Y * par1Vec3.X);
         }
 
         /**
@@ -115,7 +115,7 @@ namespace MCModeller.Minecraft.MathClasses
          */
         public Vector3D addVector(double par1, double par3, double par5)
         {
-            return VectorPool().getVecFromPool(this.X + par1, this.Y + par3, this.Z + par5);
+            return VectorPool.getVecFromPool(this.X + par1, this.Y + par3, this.Z + par5);
         }
 
         /**
@@ -176,7 +176,7 @@ namespace MCModeller.Minecraft.MathClasses
             else
             {
                 double var10 = (par2 - this.X) / var4;
-                return var10 >= 0.0D && var10 <= 1.0D ? VectorPool().getVecFromPool(this.X + var4 * var10, this.Y + var6 * var10, this.Z + var8 * var10) : null;
+                return var10 >= 0.0D && var10 <= 1.0D ? VectorPool.getVecFromPool(this.X + var4 * var10, this.Y + var6 * var10, this.Z + var8 * var10) : null;
             }
         }
 
@@ -197,7 +197,7 @@ namespace MCModeller.Minecraft.MathClasses
             else
             {
                 double var10 = (par2 - this.Y) / var6;
-                return var10 >= 0.0D && var10 <= 1.0D ? VectorPool().getVecFromPool(this.X + var4 * var10, this.Y + var6 * var10, this.Z + var8 * var10) : null;
+                return var10 >= 0.0D && var10 <= 1.0D ? VectorPool.getVecFromPool(this.X + var4 * var10, this.Y + var6 * var10, this.Z + var8 * var10) : null;
             }
         }
 
@@ -218,7 +218,7 @@ namespace MCModeller.Minecraft.MathClasses
             else
             {
                 double var10 = (par2 - this.Z) / var8;
-                return var10 >= 0.0D && var10 <= 1.0D ? VectorPool().getVecFromPool(this.X + var4 * var10, this.Y + var6 * var10, this.Z + var8 * var10) : null;
+                return var10 >= 0.0D && var10 <= 1.0D ? VectorPool.getVecFromPool(this.X + var4 * var10, this.Y + var6 * var10, this.Z + var8 * var10) : null;
             }
         }
 
