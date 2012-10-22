@@ -33,7 +33,7 @@ namespace MCModeller.Minecraft.Rendering.Modelling
 
         /** Z vertex coordinate of upper box corner */
         public readonly float posZ2;
-        public String field_78247_g;
+        public String name;
 
         public ModelBox(ModelRenderer par1ModelRenderer, int par2, int par3, float par4, float par5, float par6, int par7, int par8, int par9, float par10)
         {
@@ -113,9 +113,9 @@ namespace MCModeller.Minecraft.Rendering.Modelling
             }
         }
 
-        public ModelBox func_78244_a(String par1Str)
+        public ModelBox SetName(String name)
         {
-            this.field_78247_g = par1Str;
+            this.name = name;
             return this;
         }
     }
