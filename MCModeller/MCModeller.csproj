@@ -65,14 +65,18 @@
     <Compile Include="Minecraft\MathClasses\Vector3D.cs" />
     <Compile Include="Minecraft\MathClasses\VectorPool.cs" />
     <Compile Include="Minecraft\Rendering\FastDataConvertor.cs" />
+    <Compile Include="Minecraft\Rendering\GLAllocation.cs" />
     <Compile Include="Minecraft\Rendering\ITessellator.cs" />
+    <Compile Include="Minecraft\Rendering\Modelling\ModelBase.cs" />
     <Compile Include="Minecraft\Rendering\Modelling\ModelBox.cs" />
+    <Compile Include="Minecraft\Rendering\Modelling\ModelRenderer.cs" />
     <Compile Include="Minecraft\Rendering\Modelling\TexturedQuad.cs" />
     <Compile Include="Minecraft\Rendering\NativeBuffer.cs" />
     <Compile Include="Minecraft\Rendering\PositionTextureVertex.cs" />
     <Compile Include="Minecraft\Rendering\RendererUtil.cs" />
     <Compile Include="Minecraft\Rendering\Tessellator.cs" />
     <Compile Include="Minecraft\Rendering\TessellatorVertex.cs" />
+    <Compile Include="Minecraft\Rendering\TextureOffset.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="MainForm.resx">
@@ -105,6 +109,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Information\Faces.txt" />
+    <Content Include="Information\NeverCast.txt" />
     <Content Include="Information\Vertex Layout.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
