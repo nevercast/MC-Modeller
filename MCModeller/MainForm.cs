@@ -52,7 +52,7 @@ namespace MCModeller
             //  Load the identity matrix.
             GL.LoadIdentity();
             GL.PolygonMode(OpenGL.GL_FRONT_AND_BACK, OpenGL.GL_FILL);
-            GL.CullFace(OpenGL.GL_NONE);
+            GL.Disable(OpenGL.GL_CULL_FACE);
 
             var tessellator = Minecraft.Rendering.Tessellator.Instance;
 
@@ -67,6 +67,9 @@ namespace MCModeller
             GL.Enable(OpenGL.GL_TEXTURE_2D);
             try
             {
+                lilPerson.aimedBow = true;
+                lilPerson.isSneak = true;
+                lilPerson.isRiding = true;
                 lilPerson.onGround = 1.0f;
                 lilPerson.render(tessellator, 0f, 0f, 0f, 0f, 0f, 0.1f);
                 GL.Disable(OpenGL.GL_TEXTURE_2D);
