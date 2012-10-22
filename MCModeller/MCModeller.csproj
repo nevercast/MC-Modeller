@@ -77,6 +77,7 @@
     <Compile Include="Minecraft\Rendering\RendererUtil.cs" />
     <Compile Include="Minecraft\Rendering\Tessellator.cs" />
     <Compile Include="Minecraft\Rendering\TessellatorVertex.cs" />
+    <Compile Include="Minecraft\Rendering\TextureManager.cs" />
     <Compile Include="Minecraft\Rendering\TextureOffset.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -109,6 +110,9 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="char.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Information\Faces.txt" />
     <Content Include="Information\NeverCast.txt" />
     <Content Include="Information\Vertex Layout.txt" />

@@ -233,7 +233,7 @@ namespace MCModeller.Minecraft.Rendering
 
         public void AddVertexWithUV(double x, double y, double z, float textureU, float textureV)
         {
-            //this.SetTextureUV(textureU, textureV);
+            this.SetTextureUV(textureU, textureV);
             this.AddVertex(x, y, z);
         }
 
@@ -328,6 +328,7 @@ namespace MCModeller.Minecraft.Rendering
         {
             this.TextureU = textureU;
             this.TextureV = textureV;
+            this.HasTexture = true;
         }
 
         public void SetTranslation(double x, double y, double z)
@@ -353,13 +354,18 @@ namespace MCModeller.Minecraft.Rendering
                 this.HasTexture = false;
                 this.HasBrightness = false;
                 this.IsColorDisabled = false;
-                SetColorOpaque(0, 255, 0);
             }
         }
 
         public void StartTessellatingQuads()
         {
             this.StartTessellating(OpenGL.GL_QUADS);
+        }
+
+        internal void SetColor(int color)
+        {
+            this.Color = color;
+            this.HasColor = true;
         }
     }
 }

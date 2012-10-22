@@ -39,7 +39,7 @@
             this.openGLViewport.BackColor = System.Drawing.Color.Black;
             this.openGLViewport.BitDepth = 24;
             this.openGLViewport.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.openGLViewport.DrawFPS = true;
+            this.openGLViewport.DrawFPS = false;
             this.openGLViewport.FrameRate = 20;
             this.openGLViewport.Location = new System.Drawing.Point(200, 0);
             this.openGLViewport.Name = "openGLViewport";

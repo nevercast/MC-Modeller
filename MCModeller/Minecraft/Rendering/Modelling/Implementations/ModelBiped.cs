@@ -80,7 +80,7 @@ namespace MCModeller.Minecraft.Rendering.Modelling.Implementations
      * Sets the models various rotation angles then renders the model.
      */
         //TODO: Entity
-    public void render(object par1Entity, float par2, float par3, float par4, float par5, float par6, float par7)
+    public new void render(object par1Entity, float par2, float par3, float par4, float par5, float par6, float par7)
     {
         this.setRotationAngles(par2, par3, par4, par5, par6, par7);
         this.bipedHead.render(par7);
@@ -97,7 +97,7 @@ namespace MCModeller.Minecraft.Rendering.Modelling.Implementations
      * and legs, where par1 represents the time(so that arms and legs swing back and forth) and par2 represents how
      * "far" arms and legs can swing at most.
      */
-    public void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6)
+    public new void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6)
     {
         this.bipedHead.rotateAngleY = par4 / (180F / (float)Math.PI);
         this.bipedHead.rotateAngleX = par5 / (180F / (float)Math.PI);
