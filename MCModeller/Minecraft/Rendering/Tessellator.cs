@@ -140,7 +140,7 @@ namespace MCModeller.Minecraft.Rendering
                 }
                 if (this.HasNormals)
                 {
-                    GL.NormalPointer(OpenGL.GL_UNSIGNED_BYTE, stride, pointer + 24);
+                    GL.NormalPointer(OpenGL.GL_BYTE, stride, pointer + 24);
                     GL.EnableClientState(OpenGL.GL_NORMAL_ARRAY);
                 }
                 GL.VertexPointer(3, OpenGL.GL_FLOAT, stride, pointer);
@@ -233,7 +233,7 @@ namespace MCModeller.Minecraft.Rendering
 
         public void AddVertexWithUV(double x, double y, double z, float textureU, float textureV)
         {
-            this.SetTextureUV(textureU, textureV);
+            //this.SetTextureUV(textureU, textureV);
             this.AddVertex(x, y, z);
         }
 
@@ -318,9 +318,9 @@ namespace MCModeller.Minecraft.Rendering
         public void SetNormal(float x, float y, float z)
         {
             this.HasNormals = true;
-            byte xByte = (byte)(x * 255);
-            byte yByte = (byte)(y * 255);
-            byte zByte = (byte)(z * 255);
+            byte xByte = (byte)(x * 255f);
+            byte yByte = (byte)(y * 255f);
+            byte zByte = (byte)(z * 255f);
             this.Normal = xByte & 255 | (yByte & 255) << 8 | (zByte & 255) << 16;
         }
 
@@ -353,6 +353,7 @@ namespace MCModeller.Minecraft.Rendering
                 this.HasTexture = false;
                 this.HasBrightness = false;
                 this.IsColorDisabled = false;
+                SetColorOpaque(0, 255, 0);
             }
         }
 

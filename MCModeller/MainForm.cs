@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MCModeller.Minecraft.Rendering.Modelling;
+using MCModeller.Minecraft.Rendering.Modelling.Implementations;
 using SharpGL;
 
 namespace MCModeller
@@ -17,6 +19,7 @@ namespace MCModeller
         {
             Instance = this;
             InitializeComponent();
+            lilPerson  = new ModelBiped();
         }
 
         #region OpenGL Context
@@ -33,30 +36,32 @@ namespace MCModeller
 
         #endregion
 
+
+        static ModelBiped lilPerson;
+        bool drawing = false;
+
         private void openGLViewport_OpenGLDraw(object sender, PaintEventArgs e)
         {
+            if (drawing) return;
+            drawing = true;
             //  Clear the color and depth buffer.
             GL.Clear(OpenGL.GL_COLOR_BUFFER_BIT | OpenGL.GL_DEPTH_BUFFER_BIT);
 
             //  Load the identity matrix.
             GL.LoadIdentity();
-            
-            var tessellator = Minecraft.Rendering.Tessellator.Instance;
 
+    //        GL.PolygonMode(OpenGL.GL_FRONT_AND_BACK, OpenGL.GL_LINE);
+
+            var tessellator = Minecraft.Rendering.Tessellator.Instance;
             //  Draw a coloured pyramid.
            // GL.Begin(OpenGL.GL_TRIANGLES);
             try
             {
-                tessellator.StartTessellating(OpenGL.GL_TRIANGLES);
-                tessellator.SetColorRGBA(255, 255, 255, 255);
-
-                tessellator.AddVertex(0, 1, 0);
-                tessellator.AddVertex(-1, 0, 0);
-                tessellator.AddVertex(1, 0, 0);
-                tessellator.Draw();
+                lilPerson.render(tessellator, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.1f); 
             }
             catch (Exception ex) { }
             GL.Finish();
+            drawing = false;
         }
 
         private void openGLViewport_Resized(object sender, EventArgs e)

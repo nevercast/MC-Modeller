@@ -67,6 +67,7 @@
     <Compile Include="Minecraft\Rendering\FastDataConvertor.cs" />
     <Compile Include="Minecraft\Rendering\GLAllocation.cs" />
     <Compile Include="Minecraft\Rendering\ITessellator.cs" />
+    <Compile Include="Minecraft\Rendering\Modelling\Implementations\ModelBiped.cs" />
     <Compile Include="Minecraft\Rendering\Modelling\ModelBase.cs" />
     <Compile Include="Minecraft\Rendering\Modelling\ModelBox.cs" />
     <Compile Include="Minecraft\Rendering\Modelling\ModelRenderer.cs" />
