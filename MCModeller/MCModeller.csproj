@@ -61,6 +61,9 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Minecraft\MathClasses\MathHelper.cs" />
+    <Compile Include="Minecraft\MathClasses\Vector3D.cs" />
+    <Compile Include="Minecraft\MathClasses\VectorPool.cs" />
     <Compile Include="Minecraft\Rendering\FastDataConvertor.cs" />
     <Compile Include="Minecraft\Rendering\ITessellator.cs" />
     <Compile Include="Minecraft\Rendering\NativeBuffer.cs" />

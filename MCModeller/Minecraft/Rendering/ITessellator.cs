@@ -6,7 +6,7 @@ namespace MCModeller.Minecraft.Rendering
         int Draw();
         void AddTranslation(float x, float y, float z);
         void AddVertex(double x, double y, double z);
-        void AddVertexWithUV(double x, double y, double z, double textureU, double textureV);
+        void AddVertexWithUV(double x, double y, double z, float textureU, float textureV);
         void DisableColor();
         void SetBrightness(int brightness);
         void SetColorOpaque(int r, int g, int b);
