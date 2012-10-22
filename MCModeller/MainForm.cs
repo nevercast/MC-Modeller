@@ -33,8 +33,6 @@ namespace MCModeller
 
         #endregion
 
-        float rotation;
-
         private void openGLViewport_OpenGLDraw(object sender, PaintEventArgs e)
         {
             //  Clear the color and depth buffer.

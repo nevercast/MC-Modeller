@@ -12,30 +12,39 @@ namespace MCModeller.Minecraft.MathClasses
         /* Not thread safe, should consider looking in to that */
         private static readonly VectorPool myVectorPool = new VectorPool(300, 300);
 
-        /** X coordinate of Vec3D */
-        public double xCoord;
+        /// <summary>
+        /// X Component
+        /// </summary>
+        public double X { get; set; }
 
-        /** Y coordinate of Vec3D */
-        public double yCoord;
+        /// <summary>
+        /// Y Component
+        /// </summary>
+        public double Y { get; set; }
 
-        /** Z coordinate of Vec3D */
-        public double zCoord;
+        /// <summary>
+        /// Z Component
+        /// </summary>
+        public double Z { get; set; }
 
         /**
          * Static method for creating a new Vec3D given the three x,y,z values. This is only called from the other static
          * method which creates and places it in the list.
          */
-        public static Vector3D createVectorHelper(double par0, double par2, double par4)
+        public static Vector3D CreateVector(double par0, double par2, double par4)
         {
             return new Vector3D(par0, par2, par4);
         }
 
-        public static VectorPool getVec3Pool()
+        public static VectorPool VectorPool
         {
-            return myVectorPool;
+            get
+            {
+                return myVectorPool;
+            }
         }
 
-        public Vector3D(double par1, double par3, double par5)
+        internal Vector3D(double par1, double par3, double par5)
         {
             if (par1 == -0.0D)
             {
@@ -52,9 +61,9 @@ namespace MCModeller.Minecraft.MathClasses
                 par5 = 0.0D;
             }
 
-            this.xCoord = par1;
-            this.yCoord = par3;
-            this.zCoord = par5;
+            this.X = par1;
+            this.Y = par3;
+            this.Z = par5;
         }
 
         /**
@@ -62,9 +71,9 @@ namespace MCModeller.Minecraft.MathClasses
          */
         public Vector3D setComponents(double par1, double par3, double par5)
         {
-            this.xCoord = par1;
-            this.yCoord = par3;
-            this.zCoord = par5;
+            this.X = par1;
+            this.Y = par3;
+            this.Z = par5;
             return this;
         }
 
@@ -76,13 +85,13 @@ namespace MCModeller.Minecraft.MathClasses
          */
         public Vector3D normalize()
         {
-            double var1 = (double)MathHelper.SqrtD(this.xCoord * this.xCoord + this.yCoord * this.yCoord + this.zCoord * this.zCoord);
-            return var1 < 1.0E-4D ? getVec3Pool().getVecFromPool(0.0D, 0.0D, 0.0D) : getVec3Pool().getVecFromPool(this.xCoord / var1, this.yCoord / var1, this.zCoord / var1);
+            double var1 = (double)MathHelper.SqrtD(this.X * this.X + this.Y * this.Y + this.Z * this.Z);
+            return var1 < 1.0E-4D ? VectorPool().getVecFromPool(0.0D, 0.0D, 0.0D) : VectorPool().getVecFromPool(this.X / var1, this.Y / var1, this.Z / var1);
         }
 
         public double dotProduct(Vector3D par1Vec3)
         {
-            return this.xCoord * par1Vec3.xCoord + this.yCoord * par1Vec3.yCoord + this.zCoord * par1Vec3.zCoord;
+            return this.X * par1Vec3.X + this.Y * par1Vec3.Y + this.Z * par1Vec3.Z;
         }
 
         /**
@@ -90,14 +99,14 @@ namespace MCModeller.Minecraft.MathClasses
          */
         public Vector3D subtract(Vector3D par1Vec3)
         {
-            return getVec3Pool().getVecFromPool(par1Vec3.xCoord - this.xCoord, par1Vec3.yCoord - this.yCoord, par1Vec3.zCoord - this.zCoord);
+            return VectorPool().getVecFromPool(par1Vec3.X - this.X, par1Vec3.Y - this.Y, par1Vec3.Z - this.Z);
         }
         /**
          * Returns a new vector with the result of this vector x the specified vector.
          */
         public Vector3D crossProduct(Vector3D par1Vec3)
         {
-            return getVec3Pool().getVecFromPool(this.yCoord * par1Vec3.zCoord - this.zCoord * par1Vec3.yCoord, this.zCoord * par1Vec3.xCoord - this.xCoord * par1Vec3.zCoord, this.xCoord * par1Vec3.yCoord - this.yCoord * par1Vec3.xCoord);
+            return VectorPool().getVecFromPool(this.Y * par1Vec3.Z - this.Z * par1Vec3.Y, this.Z * par1Vec3.X - this.X * par1Vec3.Z, this.X * par1Vec3.Y - this.Y * par1Vec3.X);
         }
 
         /**
@@ -106,7 +115,7 @@ namespace MCModeller.Minecraft.MathClasses
          */
         public Vector3D addVector(double par1, double par3, double par5)
         {
-            return getVec3Pool().getVecFromPool(this.xCoord + par1, this.yCoord + par3, this.zCoord + par5);
+            return VectorPool().getVecFromPool(this.X + par1, this.Y + par3, this.Z + par5);
         }
 
         /**
@@ -114,9 +123,9 @@ namespace MCModeller.Minecraft.MathClasses
          */
         public double distanceTo(Vector3D par1Vec3)
         {
-            double var2 = par1Vec3.xCoord - this.xCoord;
-            double var4 = par1Vec3.yCoord - this.yCoord;
-            double var6 = par1Vec3.zCoord - this.zCoord;
+            double var2 = par1Vec3.X - this.X;
+            double var4 = par1Vec3.Y - this.Y;
+            double var6 = par1Vec3.Z - this.Z;
             return (double)MathHelper.SqrtD(var2 * var2 + var4 * var4 + var6 * var6);
         }
 
@@ -125,9 +134,9 @@ namespace MCModeller.Minecraft.MathClasses
          */
         public double squareDistanceTo(Vector3D par1Vec3)
         {
-            double var2 = par1Vec3.xCoord - this.xCoord;
-            double var4 = par1Vec3.yCoord - this.yCoord;
-            double var6 = par1Vec3.zCoord - this.zCoord;
+            double var2 = par1Vec3.X - this.X;
+            double var4 = par1Vec3.Y - this.Y;
+            double var6 = par1Vec3.Z - this.Z;
             return var2 * var2 + var4 * var4 + var6 * var6;
         }
 
@@ -136,9 +145,9 @@ namespace MCModeller.Minecraft.MathClasses
          */
         public double squareDistanceTo(double par1, double par3, double par5)
         {
-            double var7 = par1 - this.xCoord;
-            double var9 = par3 - this.yCoord;
-            double var11 = par5 - this.zCoord;
+            double var7 = par1 - this.X;
+            double var9 = par3 - this.Y;
+            double var11 = par5 - this.Z;
             return var7 * var7 + var9 * var9 + var11 * var11;
         }
 
@@ -147,7 +156,7 @@ namespace MCModeller.Minecraft.MathClasses
          */
         public double lengthVector()
         {
-            return (double)MathHelper.SqrtD(this.xCoord * this.xCoord + this.yCoord * this.yCoord + this.zCoord * this.zCoord);
+            return (double)MathHelper.SqrtD(this.X * this.X + this.Y * this.Y + this.Z * this.Z);
         }
 
         /**
@@ -156,9 +165,9 @@ namespace MCModeller.Minecraft.MathClasses
          */
         public Vector3D getIntermediateWithXValue(Vector3D par1Vec3, double par2)
         {
-            double var4 = par1Vec3.xCoord - this.xCoord;
-            double var6 = par1Vec3.yCoord - this.yCoord;
-            double var8 = par1Vec3.zCoord - this.zCoord;
+            double var4 = par1Vec3.X - this.X;
+            double var6 = par1Vec3.Y - this.Y;
+            double var8 = par1Vec3.Z - this.Z;
 
             if (var4 * var4 < 1.0000000116860974E-7D)
             {
@@ -166,8 +175,8 @@ namespace MCModeller.Minecraft.MathClasses
             }
             else
             {
-                double var10 = (par2 - this.xCoord) / var4;
-                return var10 >= 0.0D && var10 <= 1.0D ? getVec3Pool().getVecFromPool(this.xCoord + var4 * var10, this.yCoord + var6 * var10, this.zCoord + var8 * var10) : null;
+                double var10 = (par2 - this.X) / var4;
+                return var10 >= 0.0D && var10 <= 1.0D ? VectorPool().getVecFromPool(this.X + var4 * var10, this.Y + var6 * var10, this.Z + var8 * var10) : null;
             }
         }
 
@@ -177,9 +186,9 @@ namespace MCModeller.Minecraft.MathClasses
          */
         public Vector3D getIntermediateWithYValue(Vector3D par1Vec3, double par2)
         {
-            double var4 = par1Vec3.xCoord - this.xCoord;
-            double var6 = par1Vec3.yCoord - this.yCoord;
-            double var8 = par1Vec3.zCoord - this.zCoord;
+            double var4 = par1Vec3.X - this.X;
+            double var6 = par1Vec3.Y - this.Y;
+            double var8 = par1Vec3.Z - this.Z;
 
             if (var6 * var6 < 1.0000000116860974E-7D)
             {
@@ -187,8 +196,8 @@ namespace MCModeller.Minecraft.MathClasses
             }
             else
             {
-                double var10 = (par2 - this.yCoord) / var6;
-                return var10 >= 0.0D && var10 <= 1.0D ? getVec3Pool().getVecFromPool(this.xCoord + var4 * var10, this.yCoord + var6 * var10, this.zCoord + var8 * var10) : null;
+                double var10 = (par2 - this.Y) / var6;
+                return var10 >= 0.0D && var10 <= 1.0D ? VectorPool().getVecFromPool(this.X + var4 * var10, this.Y + var6 * var10, this.Z + var8 * var10) : null;
             }
         }
 
@@ -198,9 +207,9 @@ namespace MCModeller.Minecraft.MathClasses
          */
         public Vector3D getIntermediateWithZValue(Vector3D par1Vec3, double par2)
         {
-            double var4 = par1Vec3.xCoord - this.xCoord;
-            double var6 = par1Vec3.yCoord - this.yCoord;
-            double var8 = par1Vec3.zCoord - this.zCoord;
+            double var4 = par1Vec3.X - this.X;
+            double var6 = par1Vec3.Y - this.Y;
+            double var8 = par1Vec3.Z - this.Z;
 
             if (var8 * var8 < 1.0000000116860974E-7D)
             {
@@ -208,14 +217,14 @@ namespace MCModeller.Minecraft.MathClasses
             }
             else
             {
-                double var10 = (par2 - this.zCoord) / var8;
-                return var10 >= 0.0D && var10 <= 1.0D ? getVec3Pool().getVecFromPool(this.xCoord + var4 * var10, this.yCoord + var6 * var10, this.zCoord + var8 * var10) : null;
+                double var10 = (par2 - this.Z) / var8;
+                return var10 >= 0.0D && var10 <= 1.0D ? VectorPool().getVecFromPool(this.X + var4 * var10, this.Y + var6 * var10, this.Z + var8 * var10) : null;
             }
         }
 
         public String toString()
         {
-            return "(" + this.xCoord + ", " + this.yCoord + ", " + this.zCoord + ")";
+            return "(" + this.X + ", " + this.Y + ", " + this.Z + ")";
         }
 
         /**
@@ -225,12 +234,12 @@ namespace MCModeller.Minecraft.MathClasses
         {
             float var2 = MathHelper.Cos(par1);
             float var3 = MathHelper.Sin(par1);
-            double var4 = this.xCoord;
-            double var6 = this.yCoord * (double)var2 + this.zCoord * (double)var3;
-            double var8 = this.zCoord * (double)var2 - this.yCoord * (double)var3;
-            this.xCoord = var4;
-            this.yCoord = var6;
-            this.zCoord = var8;
+            double var4 = this.X;
+            double var6 = this.Y * (double)var2 + this.Z * (double)var3;
+            double var8 = this.Z * (double)var2 - this.Y * (double)var3;
+            this.X = var4;
+            this.Y = var6;
+            this.Z = var8;
         }
 
         /**
@@ -240,12 +249,12 @@ namespace MCModeller.Minecraft.MathClasses
         {
             float var2 = MathHelper.Cos(par1);
             float var3 = MathHelper.Sin(par1);
-            double var4 = this.xCoord * (double)var2 + this.zCoord * (double)var3;
-            double var6 = this.yCoord;
-            double var8 = this.zCoord * (double)var2 - this.xCoord * (double)var3;
-            this.xCoord = var4;
-            this.yCoord = var6;
-            this.zCoord = var8;
+            double var4 = this.X * (double)var2 + this.Z * (double)var3;
+            double var6 = this.Y;
+            double var8 = this.Z * (double)var2 - this.X * (double)var3;
+            this.X = var4;
+            this.Y = var6;
+            this.Z = var8;
         }
 
 
@@ -256,12 +265,12 @@ namespace MCModeller.Minecraft.MathClasses
         {
             float var2 = MathHelper.Cos(par1);
             float var3 = MathHelper.Sin(par1);
-            double var4 = this.xCoord * (double)var2 + this.yCoord * (double)var3;
-            double var6 = this.yCoord * (double)var2 - this.xCoord * (double)var3;
-            double var8 = this.zCoord;
-            this.xCoord = var4;
-            this.yCoord = var6;
-            this.zCoord = var8;
+            double var4 = this.X * (double)var2 + this.Y * (double)var3;
+            double var6 = this.Y * (double)var2 - this.X * (double)var3;
+            double var8 = this.Z;
+            this.X = var4;
+            this.Y = var6;
+            this.Z = var8;
         }
     }
 }
