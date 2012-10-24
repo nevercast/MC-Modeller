@@ -102,14 +102,22 @@ namespace MCModeller.Minecraft.Rendering.Modelling.Implementations
          */
         public new void setRotationAngles(float par1, float par2, float par3, float par4, float par5, float par6)
         {
+
             this.bipedHead.rotateAngleY = par4 / (180F / (float)Math.PI);
             this.bipedHead.rotateAngleX = par5 / (180F / (float)Math.PI);
+
+            this.bipedHead.rotateAngleZ = -0.3f;
+            this.bipedRightArm.rotationPointY = 3.2f;
+            this.bipedLeftArm.rotationPointZ = 5.5f;
+
+            this.bipedLeftLeg.rotateAngleZ = -(this.bipedRightLeg.rotateAngleZ = 0.1f);
+
             this.bipedHeadwear.rotateAngleY = this.bipedHead.rotateAngleY;
             this.bipedHeadwear.rotateAngleX = this.bipedHead.rotateAngleX;
             this.bipedRightArm.rotateAngleX = MathHelper.Cos(par1 * 0.6662F + (float)Math.PI) * 2.0F * par2 * 0.5F;
             this.bipedLeftArm.rotateAngleX = MathHelper.Cos(par1 * 0.6662F) * 2.0F * par2 * 0.5F;
             this.bipedRightArm.rotateAngleZ = 0.0F;
-            this.bipedLeftArm.rotateAngleZ = 0.0F;
+            this.bipedLeftArm.rotateAngleZ = -2.2F;
             this.bipedRightLeg.rotateAngleX = MathHelper.Cos(par1 * 0.6662F) * 1.4F * par2;
             this.bipedLeftLeg.rotateAngleX = MathHelper.Cos(par1 * 0.6662F + (float)Math.PI) * 1.4F * par2;
             this.bipedRightLeg.rotateAngleY = 0.0F;

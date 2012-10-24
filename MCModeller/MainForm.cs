@@ -83,7 +83,7 @@ namespace MCModeller
                 lilPerson.render(tessellator, 0f, 0f, 0f, 0f, 0f, oneOverSixteen);
                 GL.Disable(OpenGL.GL_TEXTURE_2D);
                 GL.PolygonMode(OpenGL.GL_FRONT_AND_BACK, OpenGL.GL_LINE);
-                lilPerson.render(tessellator, 0f, 0f, 0f, 0f, 0f, 1f / 16f);
+          //      lilPerson.render(tessellator, 0f, 0f, 0f, 0f, 0f, 1f / 16f);
             }
             catch (Exception ex) { }
             GL.Finish();
@@ -105,7 +105,7 @@ namespace MCModeller
             GL.Perspective(60.0f, (double)openGLViewport.Width / (double)openGLViewport.Height, 0.01, 500.0);
 
             //  Use the 'look at' helper function to position and aim the camera.
-            GL.LookAt(5, 2.64, -5, 0, 0, 0, 0, 1, 0);
+            GL.LookAt(0, 1.64, -5, 0, 0, 0, 0, 1, 0);
             //GL.perspe
             //  Set the modelview matrix.
             GL.MatrixMode(OpenGL.GL_MODELVIEW);
